@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+require_relative "../lib/calculate_distances"
+
+file_name = ARGV[0] || ""
+distance = ARGV[1].nil? ? 100 : ARGV[1].to_i
+latitude = ARGV[2].nil? ? 53.3393 : ARGV[2].to_f
+longitude = ARGV[3].nil? ? -6.2576841 : ARGV[3].to_f
+
+if !File.file?(file_name)
+  p "File not found"
+  return 0
+end
+customers = JSON.parse(File.read(file_name))
+
+output = CalculateDistances.new.select_customers(customers, distance, latitude, longitude)
+$stdout << output << "\n"

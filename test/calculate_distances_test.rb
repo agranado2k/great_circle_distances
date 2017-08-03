@@ -58,9 +58,40 @@ class CalculateDistancesTest < Minitest::Test
     assert_equal selected_customers, @cd.customers_distance_less_equal(customers, reference_point, distance)
   end
 
-  def test_select_customers_from_file
-    file = "customers.json"
+  def test_print_selected_customers
+    output = <<~END
+      29 - Oliver Ahearn
+      30 - Nick Enright
+    END
+    selected_customers = [
+       {"latitude" => "53.74452", "user_id" => 29, "name" => "Oliver Ahearn", "longitude" => "-7.11167"},
+       {"latitude" => "53.761389", "user_id" => 30, "name" => "Nick Enright", "longitude" => "-7.2875"}
+    ]
 
-    assert_equal 16, @cd.select_customers(file).size
+    assert_equal output, @cd.print_customers(selected_customers)
+  end
+
+  def test_select_customers_from_file
+    customers = JSON.parse(File.read("customers.json"))
+    output = <<~END
+      4 - Ian Kehoe
+      5 - Nora Dempsey
+      6 - Theresa Enright
+      8 - Eoin Ahearn
+      11 - Richard Finnegan
+      12 - Christina McArdle
+      13 - Olive Ahearn
+      15 - Michael Ahearn
+      17 - Patricia Cahill
+      23 - Eoin Gallagher
+      24 - Rose Enright
+      26 - Stephen McArdle
+      29 - Oliver Ahearn
+      30 - Nick Enright
+      31 - Alan Behan
+      39 - Lisa Ahearn
+    END
+
+    assert_equal output, @cd.select_customers(customers)
   end
 end

@@ -7,11 +7,15 @@ class Hash
 end
 
 class CalculateDistances
-  def select_customers(file)
-    customers = JSON.parse(File.read(file))
-    point = {latitude: 53.3393, longitude: -6.2576841}
-    distance = 100
-    customers_distance_less_equal(customers, point, distance)
+  def select_customers(customers, distance = 100, latitude=53.3393,longitude=-6.2576841)
+    point = {latitude: latitude, longitude: longitude}
+    print_customers(customers_distance_less_equal(customers, point, distance))
+  end
+
+  def print_customers(customers)
+    customers.reduce("") do |r, customer|
+      r += "#{customer["user_id"]} - #{customer["name"]}\n"
+    end
   end
 
   def customers_distance_less_equal(customers, point, distance)
