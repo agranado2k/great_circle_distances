@@ -50,4 +50,20 @@ class CalculateDistancesTest < Minitest::Test
 
     assert_equal 16, selected_customers.size
   end
+
+  def test_select_customers
+    reference_point = {latitude: 53.3393, longitude: -6.2576841}
+    distance = 100
+    input = [
+      {"latitude" => "51.92893", "user_id" => 1, "name" => "Alice Cahill", "longitude" => "-10.27699"},
+      {"latitude" => "53.761389", "user_id" => 30, "name" => "Nick Enright", "longitude" => "-7.2875"},
+      {"latitude" => "53.74452", "user_id" => 29, "name" => "Oliver Ahearn", "longitude" => "-7.11167"}
+    ]
+    output = [
+       {"latitude" => "53.74452", "user_id" => 29, "name" => "Oliver Ahearn", "longitude" => "-7.11167"},
+       {"latitude" => "53.761389", "user_id" => 30, "name" => "Nick Enright", "longitude" => "-7.2875"}
+    ]
+
+    assert_equal output, @cd.select_customers(input, reference_point, distance)
+  end
 end

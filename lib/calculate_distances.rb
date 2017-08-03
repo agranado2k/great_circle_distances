@@ -7,14 +7,16 @@ class Hash
 end
 
 class CalculateDistances
+  def select_customers(customers, point, distance)
+    customers_distance_less_equal(customers, point, distance).sort_by{|c| c["user_id"]}
+  end
+
   def customers_distance_less_equal(customers, point, distance)
-    result = []
-    customers.each do |customer|
+    customers.select do |customer|
       lat = customer["latitude"].to_f
       lon = customer["longitude"].to_f
-      result.push(customer) if distance_less_and_equal_than(lat, lon, point[:latitude], point[:longitude], distance)
+      distance_less_and_equal_than(lat, lon, point[:latitude], point[:longitude], distance)
     end
-    result
   end
 
   def distance_less_and_equal_than(lat1, lon1, lat2, lon2, distance)
