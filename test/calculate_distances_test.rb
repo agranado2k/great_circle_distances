@@ -1,7 +1,24 @@
 require "minitest/autorun"
 
 require "json"
+
+class Hash
+  def symbolize_keys
+    self.reduce({}){|h, (k,v)| h[k.to_sym] = v; h}
+  end
+end
+
 class CalculateDistances
+  def customers_distance_less_equal(customers, point, distance)
+    result = []
+    customers.each do |customer|
+      lat = customer["latitude"].to_f
+      lon = customer["longitude"].to_f
+      result.push(customer) if distance_less_and_equal_than(lat, lon, point[:latitude], point[:longitude], distance)
+    end
+    result
+  end
+
   def distance_less_and_equal_than(lat1, lon1, lat2, lon2, distance)
     great_circle_distance(lat1, lon1, lat2, lon2) <= distance
   end
@@ -66,4 +83,12 @@ class CalculateDistancesTest < Minitest::Test
     refute @cd.distance_less_and_equal_than(lat1, lon1, lat2, lon2, km_100)
   end
 
+  def test_select_customers_that_are_less_than_100_km
+    customers = JSON.parse(File.read("customers.json"))
+    reference_point = {latitude: 53.3393, longitude: -6.2576841}
+    distance = 100
+    selected_customers = @cd.customers_distance_less_equal(customers, reference_point, distance)
+
+    assert_equal 16, selected_customers.size
+  end
 end
