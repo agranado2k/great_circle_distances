@@ -7,8 +7,11 @@ class Hash
 end
 
 class CalculateDistances
-  def select_customers(customers, point, distance)
-    customers_distance_less_equal(customers, point, distance).sort_by{|c| c["user_id"]}
+  def select_customers(file)
+    customers = JSON.parse(File.read(file))
+    point = {latitude: 53.3393, longitude: -6.2576841}
+    distance = 100
+    customers_distance_less_equal(customers, point, distance)
   end
 
   def customers_distance_less_equal(customers, point, distance)
@@ -16,7 +19,7 @@ class CalculateDistances
       lat = customer["latitude"].to_f
       lon = customer["longitude"].to_f
       distance_less_and_equal_than(lat, lon, point[:latitude], point[:longitude], distance)
-    end
+    end.sort_by{|c| c["user_id"]}
   end
 
   def distance_less_and_equal_than(lat1, lon1, lat2, lon2, distance)
